@@ -11,11 +11,13 @@ export class UserService {
   ) {}
 
   findOne(query): Promise<User> {
-    return this.userRepository.findOne(query);
+    console.log('findOne - query:', query);
+    return this.userRepository.findOneBy(query);
   }
 
   async createUser(user: any): Promise<InsertResult> {
     try {
+      console.log('createUser - user:', user);
       if (!user.username) {
         throw new Error('Username is required');
       }
