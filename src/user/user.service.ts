@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
-import { Repository, InsertResult } from 'typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class UserService {
@@ -15,7 +15,7 @@ export class UserService {
     return this.userRepository.findOneBy(query);
   }
 
-  async createUser(user: any): Promise<InsertResult> {
+  async createUser(user: any): Promise<User[]> {
     try {
       console.log('createUser - user:', user);
       if (!user.username) {
@@ -34,13 +34,12 @@ export class UserService {
         throw new Error('Email is required');
       }
 
-      const userEntity = this.userRepository.create(user);
+      const newUser = this.userRepository.create(user);
 
-      const res = await this.userRepository.insert(userEntity);
+      const userEntity = await this.userRepository.save(newUser);
+      Logger.log('createUser - Created user', userEntity);
 
-      Logger.log('createUser - Created user');
-
-      return res;
+      return userEntity;
     } catch (e) {
       Logger.log(e);
       throw e;

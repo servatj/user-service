@@ -38,4 +38,17 @@ export class User implements UserInterface {
   async hashPassword() {
     this.password = await hash(this.password, 10);
   }
+
+  public static of(params: Partial<User>): User {
+    const user = new User();
+    Object.assign(user, params);
+    return user;
+  }
+}
+
+export class UserListRespositoryFake {
+  public create(): void {}
+  public async remove(): Promise<void> {}
+  public async findOne(): Promise<void> {}
+  public async save(): Promise<void> {}
 }
